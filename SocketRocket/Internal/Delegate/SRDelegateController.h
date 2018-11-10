@@ -26,11 +26,11 @@ struct SRDelegateAvailableMethods {
 };
 typedef struct SRDelegateAvailableMethods SRDelegateAvailableMethods;
 
-typedef void(^SRDelegateBlock)(id<SRWSDelegate> _Nullable delegate, SRDelegateAvailableMethods availableMethods);
+typedef void(^SRDelegateBlock)(id<SRWebSocketDelegate> _Nullable delegate, SRDelegateAvailableMethods availableMethods);
 
 @interface SRDelegateController : NSObject
 
-@property (nonatomic, weak) id<SRWSDelegate> delegate;
+@property (nonatomic, weak) id<SRWebSocketDelegate> delegate;
 @property (atomic, readonly) SRDelegateAvailableMethods availableDelegateMethods;
 
 @property (nullable, nonatomic, strong) dispatch_queue_t dispatchQueue;
