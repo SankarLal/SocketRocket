@@ -416,7 +416,7 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
         [self _readFrameNew];
     }
 
-    [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+    [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
         if (availableMethods.didOpen) {
             [delegate webSocketDidOpen:self];
         }
@@ -561,7 +561,7 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
     dispatch_async(_workQueue, ^{
         if (self.readyState != SR_CLOSED) {
             _failed = YES;
-            [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+            [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
                 if (availableMethods.didFailWithError) {
                     [delegate webSocket:self didFailWithError:error];
                 }
@@ -672,7 +672,7 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
 - (void)_handlePingWithData:(nullable NSData *)data
 {
     // Need to pingpong this off _callbackQueue first to make sure messages happen in order
-    [self.delegateController performDelegateBlock:^(id<SRWSDelegate> _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+    [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate> _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
         if (availableMethods.didReceivePing) {
             [delegate webSocket:self didReceivePingWithData:data];
         }
@@ -685,7 +685,7 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
 - (void)handlePong:(NSData *)pongData;
 {
     SRDebugLog(@"Received pong");
-    [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+    [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
         if (availableMethods.didReceivePong) {
             [delegate webSocket:self didReceivePong:pongData];
         }
@@ -802,7 +802,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
                 return;
             }
             SRDebugLog(@"Received text message.");
-            [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+            [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
                 // Don't convert into string - iff `delegate` tells us not to. Otherwise - create UTF8 string and handle that.
                 if (availableMethods.shouldConvertTextFrameToString && ![delegate webSocketShouldConvertTextFrameToString:self]) {
                     if (availableMethods.didReceiveMessage) {
@@ -824,7 +824,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
         }
         case SROpCodeBinaryFrame: {
             SRDebugLog(@"Received data message.");
-            [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+            [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
                 if (availableMethods.didReceiveMessage) {
                     [delegate webSocket:self didReceiveMessage:frameData];
                 }
@@ -1095,7 +1095,7 @@ static const uint8_t SRPayloadLenMask   = 0x7F;
         }
 
         if (!_failed) {
-            [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+            [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
                 if (availableMethods.didCloseWithCode) {
                     self.readyState = SR_CLOSED;
                     [delegate webSocket:self didCloseWithCode:_closeCode reason:_closeReason wasClean:YES];
@@ -1475,7 +1475,7 @@ static const size_t SRFrameHeaderOverhead = 32;
                     if (!_sentClose && !_failed) {
                         _sentClose = YES;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
-                        [self.delegateController performDelegateBlock:^(id<SRWSDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
+                        [self.delegateController performDelegateBlock:^(id<SRWebSocketDelegate>  _Nullable delegate, SRDelegateAvailableMethods availableMethods) {
                             self.readyState = SR_CLOSED;
                             if (availableMethods.didCloseWithCode) {
                                 [delegate webSocket:self
@@ -1530,12 +1530,12 @@ static const size_t SRFrameHeaderOverhead = 32;
 #pragma mark - Delegate
 ///--------------------------------------
 
-- (id<SRWSDelegate> _Nullable)delegate
+- (id<SRWebSocketDelegate> _Nullable)delegate
 {
     return self.delegateController.delegate;
 }
 
-- (void)setDelegate:(id<SRWSDelegate> _Nullable)delegate
+- (void)setDelegate:(id<SRWebSocketDelegate> _Nullable)delegate
 {
     self.delegateController.delegate = delegate;
 }
