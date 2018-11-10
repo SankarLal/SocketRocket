@@ -11,7 +11,7 @@
 
 #import <SocketRocket/SRWebSocket.h>
 
-@interface SRTWebSocketOperation : NSOperation <SRWSDelegate>
+@interface SRTWebSocketOperation : NSOperation <SRWebSocketDelegate>
 
 @property (nonatomic) BOOL isFinished;
 @property (nonatomic) BOOL isExecuting;
