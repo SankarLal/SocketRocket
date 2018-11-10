@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)performDelegateBlock:(SRDelegateBlock)block
 {
-    __block __strong id<SRWebSocketDelegate> delegate = nil;
+    __block __strong id<SRWSDelegate> delegate = nil;
     __block SRDelegateAvailableMethods availableMethods = {};
     dispatch_sync(self.accessQueue, ^{
         delegate = _delegate; // Not `OK` to go through `self`, since queue sync.
