@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Accessors
 ///--------------------------------------
 
-- (void)setDelegate:(id<SRWSDelegate> _Nullable)delegate
+- (void)setDelegate:(id<SRWebSocketDelegate> _Nullable)delegate
 {
     dispatch_barrier_async(self.accessQueue, ^{
         _delegate = delegate;
@@ -63,9 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
     });
 }
 
-- (id<SRWSDelegate> _Nullable)delegate
+- (id<SRWebSocketDelegate> _Nullable)delegate
 {
-    __block id<SRWSDelegate> delegate = nil;
+    __block id<SRWebSocketDelegate> delegate = nil;
     dispatch_sync(self.accessQueue, ^{
         delegate = _delegate;
     });
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)performDelegateBlock:(SRDelegateBlock)block
 {
-    __block __strong id<SRWSDelegate> delegate = nil;
+    __block __strong id<SRWebSocketDelegate> delegate = nil;
     __block SRDelegateAvailableMethods availableMethods = {};
     dispatch_sync(self.accessQueue, ^{
         delegate = _delegate; // Not `OK` to go through `self`, since queue sync.
