@@ -38,7 +38,7 @@
 @end
 
 
-@interface TCViewController () <SRWSDelegate, UITextViewDelegate>
+@interface TCViewController () <SRWebSocketDelegate, UITextViewDelegate>
 {
     SRWebSocket *_webSocket;
     NSMutableArray<TCMessage *> *_messages;
