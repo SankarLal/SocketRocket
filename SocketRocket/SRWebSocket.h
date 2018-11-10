@@ -57,7 +57,7 @@ extern NSString *const SRWebSocketErrorDomain;
  */
 extern NSString *const SRHTTPResponseErrorKey;
 
-@protocol SRWebSocketDelegate;
+@protocol SRWSDelegate;
 
 ///--------------------------------------
 #pragma mark - SRWebSocket
@@ -73,7 +73,7 @@ extern NSString *const SRHTTPResponseErrorKey;
 
  The web socket delegate is notified on all state changes that happen to the web socket.
  */
-@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
+@property (nonatomic, weak) id <SRWSDelegate> delegate;
 
 /**
  A dispatch queue for scheduling the delegate calls. The queue doesn't need be a serial queue.
@@ -328,7 +328,7 @@ extern NSString *const SRHTTPResponseErrorKey;
  The `SRWebSocketDelegate` protocol describes the methods that `SRWebSocket` objects
  call on their delegates to handle status and messsage events.
  */
-@protocol SRWebSocketDelegate <NSObject>
+@protocol SRWSDelegate <NSObject>
 
 @optional
 
